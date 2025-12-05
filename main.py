@@ -3,12 +3,16 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 from database import SessionLocal, engine
+from routers import posts # router 불러옴
 from pydantic import BaseModel
+from dummy_data import insert_dummy_posts
 
 # Post 모델(models.Post)이 실제 DB(test.db) 안에 posts 테이블로 생성
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.include_router(posts.router) # router 불러오기
 
 # DB 세션 가져오기 / 실무 백엔드는 DB 세션을 항상 열고 닫아야함 -> 자동으로 해주는 코드
 def get_db():

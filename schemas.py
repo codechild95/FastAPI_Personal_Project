@@ -1,13 +1,13 @@
 from pydantic import BaseModel
 
-class PostBase(BaseModel):
-    title: str
-    content: str
+# POST (게시글)
+class UserBase(BaseModel):
+    username: str
 
-class PostCreate(PostBase):
-    pass
+class UserCreate(UserBase):
+    password: str
 
-class Post(PostBase):
+class User(UserBase):
     id: int
 
     class Config:
