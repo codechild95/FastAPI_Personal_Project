@@ -1,17 +1,20 @@
 from fastapi import FastAPI, HTTPException, Depends
+from database import SessionLocal, engine
+
 from sqlalchemy.orm import Session
 import models
 import schemas
-from database import SessionLocal, engine
+
 from routers import posts # router 불러옴
 from routers import users
 from pydantic import BaseModel
 from dummy_data import insert_dummy_posts
 
-insert_dummy_posts()
-
 # Post 모델(models.Post)이 실제 DB(test.db) 안에 posts 테이블로 생성
 models.Base.metadata.create_all(bind=engine)
+
+insert_dummy_posts()
+
 
 app = FastAPI()
 
