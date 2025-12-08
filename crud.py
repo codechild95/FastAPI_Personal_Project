@@ -3,7 +3,7 @@ import models, schemas
 from passlib.context import CryptContext
 
 # 비밀번호 해싱 설정
-pwd_context = CryptContext(schemas=["bycrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ## POST 관련 crud
 def get_posts(db: Session):
