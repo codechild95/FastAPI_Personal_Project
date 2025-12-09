@@ -14,15 +14,21 @@ class Post(PostBase):
     class Config:
         orm_mode = True
 
+
+
 class UserBase(BaseModel):
     username: str
 
+# User Create (회원가입)
 class UserCreate(UserBase):
     password: str
 
+# User Response
 class User(UserBase):
     id: int
-    
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class LoginRequest(UserBase):
+    password: str
 
