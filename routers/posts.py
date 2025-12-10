@@ -1,14 +1,25 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 import schemas, crud
 from auth_utils import get_current_user
 from database import get_db
 import models
+templates = Jinja2Templates(directory="templates")
 
 router = APIRouter(
     prefix="/posts",
     tags=["posts"]
 )
+
+@router.get("/list")
+def list_posts(request: Request, db: Session = Depends(get_db)):
+    posts = db.query(models.Post).all()
+    return templates.TemplateResponse("posts.html", 
+    {
+        "request": request,
+        "posts": posts
+    })
 
 @router.get("/", response_model=list[schemas.Post])
 def read_posts(db: Session = Depends(get_db)):

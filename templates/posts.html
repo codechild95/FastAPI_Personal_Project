@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>게시글 목록</title>
+</head>
+<body>
+    <h1> 게시글 목록</h1>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>제목</th>
+            <th>내용</th>
+            <th>작성자</th>
+        </tr>
+
+        {% for p in posts %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.title }}</td>
+            <td>{{ p.content }}</td>
+            <td>{{ p.user_id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/">홈으로 돌아가기</a>
+</body>
+</html>
