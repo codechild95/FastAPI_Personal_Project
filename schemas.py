@@ -15,7 +15,7 @@ class Post(PostBase):
         orm_mode = True
 
 
-
+# ----User----
 class UserBase(BaseModel):
     username: str
 
@@ -29,6 +29,7 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+# ----Login----
 class LoginRequest(UserBase):
     password: str
 

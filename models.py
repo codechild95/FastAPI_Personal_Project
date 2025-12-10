@@ -17,4 +17,4 @@ class Post(Base):
     content = Column(String)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    author = relationship("User")
+    author = relationship("User", back_populates="posts")

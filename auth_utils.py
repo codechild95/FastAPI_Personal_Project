@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from fastapi import HTTPException, Depends, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 import models
 from database import get_db   # DB는 여기서만 픽스
@@ -11,7 +11,7 @@ SECRET_KEY = "secret-key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")   # Swagger 인증 스키마 생성
+oauth2_scheme = HTTPBearer()
 
 def create_access_token(data: dict):
     to_encode = data.copy()
@@ -19,8 +19,10 @@ def create_access_token(data: dict):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-def get_current_user(token: str = Depends(oauth2_scheme),
+def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
                      db: Session = Depends(get_db)):
+    
+    token = token.credentials
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
