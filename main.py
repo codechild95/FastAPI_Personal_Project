@@ -40,10 +40,6 @@ def create_post(post: schemas.PostCreate, db: Session = Depends(get_db)): # 요�
     # POST는 글이 DB에 새롭게 생성되는 동작
 
 # GET 전체
-@app.get("/")
-def home(request: Request):
-    return templates.TemplateResponse("index.html",{"request": request})
-
 @app.get("/posts", response_model=list[schemas.Post]) # DB에서 Post테이블 전체 데이터 SELECT, 리스트 형태로 반환
 def read_posts(db: Session = Depends(get_db)): 
     return db.query(models.Post).all() # FastAPI가 자동으로 JSON으로 반환

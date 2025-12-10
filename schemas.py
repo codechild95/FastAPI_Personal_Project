@@ -33,3 +33,9 @@ class User(UserBase):
 class LoginRequest(UserBase):
     password: str
 
+class PostWithAuthor(PostBase):
+    id: int
+    author : User | None # User 스키마 재사용
+
+    class Config:
+        from_attributes = True
