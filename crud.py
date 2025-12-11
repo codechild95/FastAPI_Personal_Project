@@ -13,14 +13,14 @@ def get_posts(db: Session):
 def get_post(db: Session, post_id: int):
     return db.query(models.Post).filter(models.Post.id == post_id).first()
 
-def create_post(db: Session, post: schemas.PostCreate):
-    db_post = models.Post(title=post.title, content=post.content)
+def create_post(db: Session, post: schemas.PostCreate, user_id: int | None = None):
+    db_post = models.Post(title=post.title, content=post.content, user_id=user_id)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
     return db_post
 
-## User 관련 crud
+## User 관련 crud (중복함수 정리)
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
@@ -40,3 +40,14 @@ def verify_password(plain_password, hashed_password):
 
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
+
+def get_posts_with_authors(db: Session):
+    """SELECT posts.*, users.username... 
+    JOIN users ON posts.user_id = users.id
+    비슷한 쿼리
+    """
+    return db.query(models.Post).join(models.User).all()
+
+def get_posts_by_users(db: Session, user_id: int):
+    return db.query(models.Post).filter(models.Post.user_id == user_id).all()
+
