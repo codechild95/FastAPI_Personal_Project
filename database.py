@@ -1,10 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db" #로컬 파일 DB
+SQLALCHEMY_DATABASE_URL = (
+    "mysql+pymysql://root:Ghda74661!@localhost:3306/fastapi_db"
+    ) #로컬 파일 DB
 
 engine =  create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL, echo=True, pool_pre_ping=True
 )
 
 # DB 세션 형성

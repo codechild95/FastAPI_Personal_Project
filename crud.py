@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 import models, schemas
 from passlib.context import CryptContext
+from sqlalchemy import text
 
 # 비밀번호 해싱 설정
 pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
@@ -41,13 +42,17 @@ def verify_password(plain_password, hashed_password):
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 
-def get_posts_with_authors(db: Session):
-    """SELECT posts.*, users.username... 
-    JOIN users ON posts.user_id = users.id
-    비슷한 쿼리
-    """
-    return db.query(models.Post).join(models.User).all()
-
 def get_posts_by_users(db: Session, user_id: int):
     return db.query(models.Post).filter(models.Post.user_id == user_id).all()
 
+# JOIN + dict 결과 반환 함수 추가
+def get_posts_with_author_rows(db: Session):
+    sql = text("""
+               SELECT posts.id, posts.title, posts.content, users.username
+               FROM posts
+               JOIN users ON posts.user_id = users.id
+               """)
+    result = db.execute(sql)
+
+    # Row 객체 -> dict로 변환
+    return [dict(row._mapping for row in result.fetchall())]
